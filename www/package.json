@@ -1,0 +1,22 @@
+{
+  "main": "cordova-oauth.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/async": "^2.0.42",
+    "@types/cordova": "^0.0.34",
+    "@types/webpack": "^3.0.10",
+    "awesome-typescript-loader": "^3.2.3",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "typescript": "^2.4.2",
+    "webpack": "^3.5.5"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/webpack -p"
+  },
+  "dependencies": {
+    "async": "^2.5.0",
+    "fetch": "^1.1.0"
+  }
+}

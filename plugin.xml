@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-spotify-oauth" version="0.1.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>cordova-spotify-oauth</name>
+
+    <hook type="before_plugin_install" src="package.sh" />
+
+    <js-module name="cordova-spotify-oauth" src="www/build/spotify-oauth.min.js">
+        <merges target="cordova.plugins" />
+    </js-module>
+
+    <dependency id="es6-promise-plugin"/>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="SpotifyOAuth">
+                <param name="ios-package" value="SpotifyOAuthPlugin" />
+            </feature>
+        </config-file>
+
+        <dependency id="cordova-plugin-add-swift-support" version="1.6.1"/>
+
+        <source-file src="src/ios/SpotifyOAuthPlugin.swift"/>
+    </platform>
+</plugin>
