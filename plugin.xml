@@ -9,7 +9,6 @@
     </js-module>
 
     <dependency id="es6-promise-plugin"/>
-    <dependency id="cordova-plugin-nativestorage" version="2.2.2"/>
 
     <platform name="android">
         <hook type="before_plugin_install" src="install-android.sh"/>

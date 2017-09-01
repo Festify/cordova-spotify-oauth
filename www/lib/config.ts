@@ -1,3 +1,3 @@
 export default {
-    NATIVE_STORAGE_KEY: "SpotifyOAuthData"
+    LOCAL_STORAGE_KEY: "SpotifyOAuthData"
 }

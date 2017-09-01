@@ -2,7 +2,15 @@ import 'whatwg-fetch';
 
 import config from './lib/config';
 import exec from './lib/exec-promise';
-import * as Storage from './lib/native-storage';
+
+/**
+ * The authorization data as returned from the native clients.
+ */
+interface NativeAuthorizationData {
+    access_token: string;
+    encrypted_refresh_token: string;
+    expires_in: number;
+}
 
 /**
  * The authorization data.
@@ -64,28 +72,33 @@ export function authorize(cfg: Config) {
         throw new Error("missing tokenRefreshUrl");
     }
 
-    return Storage.get<AuthorizationData>(config.NATIVE_STORAGE_KEY) 
-        .catch(() => null) // Ignore errors
-        .then(data => {
-            if (data) {
-                const expiry = Date.now() + 60 * 5 * 1000;
-                if (data.expiresAt > expiry) {
-                    return Promise.resolve(data);
-                } else {
-                    const refreshPromise = refresh(cfg, data);
-                    refreshPromise
-                        .then(data => Storage.set(config.NATIVE_STORAGE_KEY, data))
-                        .catch(err => console.error("Failed to store Spotify OAuth data", err));
-                    return refreshPromise;
-                }
-            } else {
-                const oauthPromise = oauth(cfg);
-                oauthPromise
-                    .then(data => Storage.set(config.NATIVE_STORAGE_KEY, data))
-                    .catch(err => console.error("Failed to store Spotify OAuth data", err));
-                return oauthPromise;
-            }
-        });
+    const lsData = localStorage.getItem(config.LOCAL_STORAGE_KEY);
+
+    if (lsData) {
+        const authData = JSON.parse(lsData) as AuthorizationData;
+
+        const expiry = Date.now() + 60 * 5 * 1000; // 5min margin
+        if (authData.expiresAt > expiry) {
+            return Promise.resolve(authData);
+        } else {
+            return refresh(cfg, authData)
+                .then(data => {
+                    localStorage.setItem(config.LOCAL_STORAGE_KEY, JSON.stringify(data));
+                    return data;
+                });
+        }
+    } else {
+        return oauth(cfg)
+            .then(nativeAuthData => ({
+                accessToken: nativeAuthData.access_token,
+                encryptedRefreshToken: nativeAuthData.encrypted_refresh_token,
+                expiresAt: Date.now() + nativeAuthData.expires_in
+            }))
+            .then(data => {
+                localStorage.setItem(config.LOCAL_STORAGE_KEY, JSON.stringify(data));
+                return data;
+            });
+    }
 }
 
 /**
@@ -93,18 +106,29 @@ export function authorize(cfg: Config) {
  * oauth dance again.
  */
 export function forget() {
-    return Storage.remove(config.NATIVE_STORAGE_KEY);
+    return localStorage.removeItem(config.LOCAL_STORAGE_KEY);
 }
 
-function oauth(cfg: Config): Promise<AuthorizationData> {
+/**
+ * Performs the OAuth dance.
+ * 
+ * @param cfg OAuth2 config
+ */
+function oauth(cfg: Config): Promise<NativeAuthorizationData> {
     return exec("authorize", [
         cfg.clientId,
         cfg.redirectUrl,
         cfg.tokenExchangeUrl,
         cfg.scopes
-    ]) as Promise<AuthorizationData>;
+    ]) as Promise<NativeAuthorizationData>;
 }
 
+/**
+ * Refreshes the given access token.
+ * 
+ * @param cfg OAuth2 config
+ * @param data The auth data to refresh
+ */
 function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationData> {
     return fetch(cfg.tokenRefreshUrl, {
         method: 'post',
