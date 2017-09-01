@@ -2,7 +2,6 @@
   "main": "cordova-oauth.js",
   "license": "MIT",
   "devDependencies": {
-    "@types/async": "^2.0.42",
     "@types/cordova": "^0.0.34",
     "@types/webpack": "^3.0.10",
     "awesome-typescript-loader": "^3.2.3",
@@ -17,6 +16,6 @@
   },
   "dependencies": {
     "async": "^2.5.0",
-    "fetch": "^1.1.0"
+    "whatwg-fetch": "^2.0.3"
   }
 }

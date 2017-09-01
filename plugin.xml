@@ -5,20 +5,39 @@
     <hook type="before_plugin_install" src="package.sh" />
 
     <js-module name="cordova-spotify-oauth" src="www/build/spotify-oauth.min.js">
-        <merges target="cordova.plugins" />
+        <merges target="cordova.plugins"/>
     </js-module>
 
     <dependency id="es6-promise-plugin"/>
+    <dependency id="cordova-plugin-nativestorage" version="2.2.2"/>
+
+    <platform name="android">
+        <hook type="before_plugin_install" src="install-android.sh"/>
+        
+        <!--
+            Because Cordova doesn't like linking to AARs, we do some black magic
+            gradle trickery to link against the file.
+         -->
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+        <resource-file
+            src="src/android/spotify-auth/auth-lib/build/outputs/aar/spotify-android-auth-1.0.0.aar"
+            target="libs/spotify-auth.aar" />
+    </platform>
 
     <platform name="ios">
+        <hook type="before_plugin_install" src="install-ios.sh"/>
+
         <config-file target="config.xml" parent="/*">
             <feature name="SpotifyOAuth">
-                <param name="ios-package" value="SpotifyOAuthPlugin" />
+                <param name="ios-package" value="SpotifyOAuthPlugin"/>
             </feature>
         </config-file>
 
         <dependency id="cordova-plugin-add-swift-support" version="1.6.1"/>
 
+        <framework src="src/ios/spotify-sdk/SpotifyAuthentication.framework" custom="true"/>
+
         <source-file src="src/ios/SpotifyOAuthPlugin.swift"/>
+        <header-file src="src/ios/SpotifyOAuth-Bridging-Header.h"/>
     </platform>
 </plugin>

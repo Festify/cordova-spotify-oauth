@@ -14,7 +14,7 @@ const q = queue(({ methodName, args }, cb) => {
     )
 });
 
-export default function(methodName: string, args: any[]) {
+export default function<T>(methodName: string, args: any[] = []) {
     if (!methodName) {
         throw new Error("Missing method or class name argument (1st).");
     }

@@ -11,11 +11,13 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['.ts']
+        extensions: ['.js', '.ts']
     },
+    devtool: 'source-map',
     externals: [
         "cordova",
-        "cordova/exec"
+        "cordova/exec",
+        "NativeStorage"
     ],
     output: {
         path: path.resolve(__dirname, 'build'),
