@@ -85,6 +85,11 @@ export function authorize(cfg: Config) {
                 .then(data => {
                     localStorage.setItem(config.LOCAL_STORAGE_KEY, JSON.stringify(data));
                     return data;
+                })
+                .catch(err => {
+                    const e = new Error(err.message);
+                    e.name = "refresh_failed";
+                    return Promise.reject(e);
                 });
         }
     } else {
