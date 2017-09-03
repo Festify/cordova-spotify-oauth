@@ -1,17 +1,23 @@
 import Foundation
 import SafariServices
 
+extension URL {
+    subscript(queryParam: String) -> String? {
+        guard let url = URLComponents(string: self.absoluteString) else { return nil }
+        return url.queryItems?.first(where: { $0.name == queryParam })?.value
+    }
+}
+
 @objc(SpotifyOAuthPlugin) class SpotifyOAuthPlugin: CDVPlugin, SFSafariViewControllerDelegate {
     private var currentCommand: CDVInvokedUrlCommand?
     private var currentNsObserver: AnyObject?
     
-    func authorize(_ command: CDVInvokedUrlCommand) {
+    func getCode(_ command: CDVInvokedUrlCommand) {
         let auth = SPTAuth.defaultInstance()!
         
         auth.clientID = command.argument(at: 0) as! String
         auth.redirectURL = URL(string: command.argument(at: 1) as! String)
-        auth.tokenSwapURL = URL(string: command.argument(at: 2) as! String)
-        auth.requestedScopes = command.argument(at: 3) as! Array
+        auth.requestedScopes = command.argument(at: 2) as! Array
         
         let svc = SFSafariViewController(url: auth.spotifyWebAuthenticationURL())
         svc.delegate = self;
@@ -30,32 +36,14 @@ import SafariServices
             NotificationCenter.default.removeObserver(observer!)
             self.currentNsObserver = nil
             self.currentCommand = nil
-            
-            auth.handleAuthCallback(withTriggeredAuthURL: url) { (err, sess) in
-                guard err == nil else {
-                    let res = CDVPluginResult(
-                        status: CDVCommandStatus_ERROR,
-                        messageAs: [
-                            "type": "auth_failed",
-                            "msg": err!.localizedDescription
-                        ]
-                    )
-                    
-                    self.commandDelegate.send(res, callbackId: command.callbackId)
-                    return
-                }
-                
-                let res = CDVPluginResult(
-                    status: CDVCommandStatus_OK,
-                    messageAs: [
-                        "access_token": sess!.accessToken,
-                        "encrypted_refresh_token": sess!.encryptedRefreshToken,
-                        "expires_in": (sess!.expirationDate.timeIntervalSinceNow * 1000).rounded(.down)
-                    ]
-                )
-                
-                self.commandDelegate.send(res, callbackId: command.callbackId)
-            }
+
+            let res = CDVPluginResult(
+                status: CDVCommandStatus_OK,
+                messageAs: [
+                    "code": url["code"]
+                ]
+            )
+            self.commandDelegate.send(res, callbackId: command.callbackId)
         }
         
         self.currentCommand = command

@@ -13,6 +13,20 @@
     <platform name="android">
         <hook type="before_plugin_install" src="install-android.sh"/>
         
+        <config-file target="config.xml" parent="/*">
+            <feature name="SpotifyOAuth">
+                <param name="android-package" value="rocks.festify.SpotifyOAuthPlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity
+                android:name="com.spotify.sdk.android.authentication.LoginActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        </config-file>
+
+        <source-file src="src/android/SpotifyOAuthPlugin.java" target-dir="src/rocks/festify"/>
+
         <!--
             Because Cordova doesn't like linking to AARs, we do some black magic
             gradle trickery to link against the file.
