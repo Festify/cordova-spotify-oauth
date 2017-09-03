@@ -5,5 +5,28 @@
   "main": "www/build/spotify-oauth.min.js",
   "repository": "https://github.com/Festify/cordova-spotify-oauth.git",
   "author": "Festify Dev Team <mail+git@festify.rocks>",
-  "license": "MIT"
+  "contributors": [
+    "Moritz Gunz <moritz.gunz@gmail.com>",
+    "Leo Bernard <admin@leolabs.org>",
+    "Marcus Weiner <melodie124@gmail.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Festify/cordova-spotify-oauth.git"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "0.1.0": {
+        "cordova": "^6.0.0 - 7.0.0"
+      }
+    }
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "spotify",
+    "oauth"
+  ]
 }
