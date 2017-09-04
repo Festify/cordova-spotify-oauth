@@ -110,7 +110,7 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             try {
                 res[i] = arr.getString(i);
             } catch (JSONException ex) {
-                Log.wtf(TAG, "Couldn't parse JSON array.", ex);
+                Log.e(TAG, "Couldn't parse JSON string array.", ex);
             }
         }
         return res;
