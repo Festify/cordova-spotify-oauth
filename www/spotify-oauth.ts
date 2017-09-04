@@ -1,7 +1,12 @@
 import 'whatwg-fetch';
 import exec from './lib/exec-promise';
 
-const LS_KEY = "SpotifyOAuthData";
+/**
+ * The local storage key where the auth data is cached.
+ * 
+ * The data is stored as stringified JSON object.
+ */
+export const LOCAL_STORAGE_KEY = "SpotifyOAuthData";
 
 /**
  * The authorization data.
@@ -71,7 +76,7 @@ export function authorize(cfg: Config): Promise<AuthorizationData> {
         throw new Error("missing tokenRefreshUrl");
     }
 
-    const lsData = localStorage.getItem(LS_KEY);
+    const lsData = localStorage.getItem(LOCAL_STORAGE_KEY);
 
     if (lsData) {
         const authData = JSON.parse(lsData) as AuthorizationData;
@@ -168,12 +173,12 @@ function handleHttpErrors(resp: Response): Promise<Response> {
  * 
  * @param pr the Promise with the AuthorizationData
  * @param errorName the error name to assign in case of failure
- * @private
+ * @hidden
  */
 function saveAndHandleErrors(pr: Promise<AuthorizationData>, errorName: string): Promise<AuthorizationData> {
     return pr
         .then(data => {
-            localStorage.setItem(LS_KEY, JSON.stringify(data));
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
             return data;
         })
         .catch(err => {
