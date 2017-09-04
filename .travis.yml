@@ -10,6 +10,6 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: www/build/docs
+  local_dir: build/docs # We cd'd into www before
   on:
     branch: master
