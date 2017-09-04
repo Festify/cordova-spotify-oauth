@@ -18,8 +18,6 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext ctx) 
             throws JSONException {
-        Log.d(TAG, "Attempting to execute " + action);
-
         if ("getCode".equals(action)) {
             String clientId = args.getString(0);
             String redirectUrl = args.getString(1);
@@ -28,7 +26,6 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             this.getCode(clientId, redirectUrl, scopes, ctx);
             return true;
         } else {
-            Log.e(TAG, "Action " + action + " could not be found.");
             return false;
         }
     }
@@ -50,7 +47,6 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             .setScopes(scopes)
             .build();
 
-        Log.d(TAG, "Build auth request, opening activity");
         AuthenticationClient.openLoginActivity(
             this.cordova.getActivity(), 
             LOGIN_REQUEST_CODE, 
@@ -74,8 +70,6 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
 
         final AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
         if (response.getType() == AuthenticationResponse.Type.CODE) {
-            Log.d(TAG, "Got activity result. Returning code.");
-
             JSONObject res = new JSONObject();
             try {
                 res.put("code", response.getCode());
@@ -84,8 +78,6 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             }
             cb.success(res);
         } else {
-            Log.e(TAG, "Got invalid activity result. Aborting.");
-
             JSONObject err = response.getType() == AuthenticationResponse.Type.EMPTY ?
                 this.makeError(
                     "auth_canceled",
