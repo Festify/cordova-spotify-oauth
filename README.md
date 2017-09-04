@@ -1,8 +1,8 @@
 # Cordova Spotify OAuth Plugin
 
-Easy Spotify authentication for [Apache Cordova](cordova) / PhoneGap apps
+Easy Spotify authentication for [Apache Cordova][cordova] / PhoneGap apps
 
-[API Documentation](api-docs)
+[API Documentation][api-docs]
 
 ## Features
 
@@ -18,9 +18,9 @@ cordova plugin add cordova-spotify-oauth
 
 ## Usage
 
-The plugin implements the [OAuth Authorization Code](auth-code-flow) flow for the Spotify API. This allows you to obtain access and refresh tokens for user related-actions (such as viewing and modifying their library, streaming tracks via the SDKs, etc.). Therefore, additional preparation in addition to installing the plugin is required.
+The plugin implements the [OAuth Authorization Code][auth-code-flow] flow for the Spotify API. This allows you to obtain access and refresh tokens for user related-actions (such as viewing and modifying their library, streaming tracks via the SDKs, etc.). Therefore, additional preparation in addition to installing the plugin is required.
 
-The JS interface is described below at [API Documentation](api-docs).
+The JS interface is described below at [API Documentation][api-docs].
 
 ### Protocol registration
 
@@ -28,7 +28,7 @@ The plugin uses custom URL schemes (universal links support will follow) to redi
 
 You need to register the callback protocol inside the `App Info.plist` so that iOS knows which app to start when it is redirected when the authentication is done. If you want to use Chrome Custom Tabs (optional, but 110% nice), you must also register the URL scheme and path you will be redirected to within the `AndroidManifest.xml` file.
 
-Take a look at [this repository](cordova-scheme-helper) to see how it's done for both cases.
+Take a look at [this repository][cordova-scheme-helper] to see how it's done for both cases.
 
 ### Spotify Developer Registration
 
@@ -38,7 +38,7 @@ You need to register your custom redirect URL within the Spotify Developer conso
 
 The authorization code flow requires server code for security. These come in the form of two HTTP endpoints, one for the auth code exchange, and the other one for access token refresh. The SDK will POST `application/x-www-form-urlencoded` data and expects JSON back.
 
-To easily implement them, we built a [Serverless](serverless) service for [AWS Lambda](aws-lambda) over in the [`oauth-token-api`](token-api-example) folder. Make sure you [install the Serverless Framework properly](serverless-installation)!
+To easily implement them, we built a [Serverless][serverless] service for [AWS Lambda][aws-lambda] over in the [`oauth-token-api`][token-api-example] folder. Make sure you [install the Serverless Framework properly][serverless-installation]!
 
 For the execution of the functions to work you need to set some environmental configuration in the file `oauth-token-api/.env`
 
@@ -56,14 +56,14 @@ cd oauth-token-api
 serverless deploy
 ```
 
-The `serverless` CLI will then print the URL where the functions can be reached. These are the values needed for [`tokenExchangeUrl`](token-exchange-url) and [`tokenRefreshUrl`](token-refresh-url).
+The `serverless` CLI will then print the URL where the functions can be reached. These are the values needed for [`tokenExchangeUrl`][token-exchange-url] and [`tokenRefreshUrl`][token-refresh-url].
 
 ### JavaScript usage
 
-Head over to the [API Documentation](api-docs).
+Head over to the [API Documentation][api-docs].
 
 ## Contributing
-Pull requests are very welcome! Please use the [gitmoji](gitmoji) style for commit messages.
+Pull requests are very welcome! Please use the [gitmoji][gitmoji] style for commit messages.
 
 
 [api-docs]: https://festify.github.io/cordova-spotify-oauth/ "API Documentation"
