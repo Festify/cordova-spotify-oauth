@@ -32,6 +32,19 @@ export interface Config {
     /** The redirect URI as entered in the Spotify dev console. */
     redirectUrl: string;
 
+    /** 
+     * Safety margin time (in milliseconds) for the token refresh. 
+     * 
+     * The plugin applies a safety margin to the token lifetime in order
+     * to give the token user enough time to perform all operations needed.
+     * 
+     * Otherwise the plugin might hand out a token that is already expired
+     * before it could ever be used.
+     * 
+     * The safety margin defaults to 30s.
+     */
+    refreshSafetyMargin?: number;
+
     /** Requested OAuth scopes. */
     scopes: string[];
 
@@ -75,13 +88,19 @@ export function authorize(cfg: Config): Promise<AuthorizationData> {
     if (!cfg.tokenRefreshUrl) {
         throw new Error("missing tokenRefreshUrl");
     }
+    if ((cfg.refreshSafetyMargin || 0) < 0) {
+        throw new Error("safety margin < 0");
+    }
 
     const lsData = localStorage.getItem(LOCAL_STORAGE_KEY);
 
     if (lsData) {
         const authData = JSON.parse(lsData) as AuthorizationData;
 
-        const expiry = Date.now() + 60 * 5 * 1000; // 5min margin
+        const margin = (cfg.refreshSafetyMargin != undefined) 
+            ? cfg.refreshSafetyMargin
+            : 30000;
+        const expiry = Date.now() + margin;
         if (authData.expiresAt > expiry) {
             return Promise.resolve(authData);
         } else {
