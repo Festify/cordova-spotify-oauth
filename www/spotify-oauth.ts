@@ -64,7 +64,7 @@ export interface Config {
  * token, caches those, and returns both to the developer.
  * 
  * When it is invoked again, it will first check whether the cached access
- * token is still valid (including a 5min safety margin), and return it
+ * token is still valid (including a configurable safety margin), and return it
  * directly if that is the case. Otherwise, the method will transparently
  * refresh the token and return that.
  * 
