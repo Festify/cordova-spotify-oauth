@@ -19,7 +19,7 @@ const q = queue(({ methodName, args }, cb) => {
  * 
  * @param methodName the native method to execute
  * @param args method arguments
- * @private
+ * @hidden
  */
 export default function<T>(methodName: string, args: any[] = []) {
     if (!methodName) {

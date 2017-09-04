@@ -94,14 +94,14 @@ export function authorize(cfg: Config): Promise<AuthorizationData> {
  * This is akin to a "logout".
  */
 export function forget() {
-    return localStorage.removeItem(LS_KEY);
+    return localStorage.removeItem(LOCAL_STORAGE_KEY);
 }
 
 /**
  * Performs the OAuth dance.
  * 
  * @param cfg OAuth2 config
- * @private
+ * @hidden
  */
 function oauth(cfg: Config): Promise<AuthorizationData> {
     return exec("getCode", [
@@ -130,7 +130,7 @@ function oauth(cfg: Config): Promise<AuthorizationData> {
  * 
  * @param cfg OAuth2 config
  * @param data The auth data to refresh
- * @private
+ * @hidden
  */
 function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationData> {
     return fetch(cfg.tokenRefreshUrl, {
@@ -154,7 +154,7 @@ function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationDat
  * if everything is okay.
  * 
  * @param resp the HTTP response to handle
- * @private
+ * @hidden
  */
 function handleHttpErrors(resp: Response): Promise<Response> {
     return resp.ok ?
