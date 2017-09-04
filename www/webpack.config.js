@@ -32,7 +32,7 @@ module.exports = {
             excludePrivate: true,
             ignoreCompilerErrors: true,
             name: "Cordova Spotify OAuth Plugin",
-            mode: 'module',
+            mode: 'file',
             readme: 'none',
             target: 'ES6'
         }, './spotify-oauth.ts')
