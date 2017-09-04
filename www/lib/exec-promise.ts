@@ -14,6 +14,13 @@ const q = queue(({ methodName, args }, cb) => {
     )
 });
 
+/**
+ * Cordova's exec with Promise and error handling support.
+ * 
+ * @param methodName the native method to execute
+ * @param args method arguments
+ * @private
+ */
 export default function<T>(methodName: string, args: any[] = []) {
     if (!methodName) {
         throw new Error("Missing method or class name argument (1st).");

@@ -18,7 +18,7 @@ export interface AuthorizationData {
 }
 
 /**
- * Method parameters for `authorize`.
+ * OAuth configuration data.
  */
 export interface Config {
     /** The client ID as per the Spotify dev console. */
@@ -38,13 +38,21 @@ export interface Config {
 }
 
 /**
- * Obtains a fresh access token.
+ * Obtains valid authorization data.
  * 
- * The method either returns a cached one, if it is still valid (+ 5min margin),
- * gets a new one through the refresh token, or performs the full OAuth dance, depending
- * on which data is currently stored.
+ * This method performs the necessary steps in order to obtain a valid
+ * access token. It performs the OAuth dance prompting the user to log in,
+ * exchanges the obtained authorization code for an access and a refresh
+ * token, caches those, and returns both to the developer.
  * 
- * @param cfg OAuth config
+ * When it is invoked again, it will first check whether the cached access
+ * token is still valid (including a 5min safety margin), and return it
+ * directly if that is the case. Otherwise, the method will transparently
+ * refresh the token and return that.
+ * 
+ * Bottom line - always call this if you need a valid access token in your code.
+ * 
+ * @param cfg OAuth configuration
  */
 export function authorize(cfg: Config): Promise<AuthorizationData> {
     if (!cfg.clientId) {
@@ -80,17 +88,20 @@ export function authorize(cfg: Config): Promise<AuthorizationData> {
 }
 
 /**
- * Removes all stored data so that `authorize` must perform the full
+ * Removes all cached data so that `authorize` performs the full
  * oauth dance again.
+ * 
+ * This is akin to a "logout".
  */
 export function forget() {
-    return localStorage.removeItem(config.LOCAL_STORAGE_KEY);
+    return localStorage.removeItem(LS_KEY);
 }
 
 /**
  * Performs the OAuth dance.
  * 
  * @param cfg OAuth2 config
+ * @private
  */
 function oauth(cfg: Config): Promise<AuthorizationData> {
     return exec("getCode", [
@@ -119,6 +130,7 @@ function oauth(cfg: Config): Promise<AuthorizationData> {
  * 
  * @param cfg OAuth2 config
  * @param data The auth data to refresh
+ * @private
  */
 function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationData> {
     return fetch(cfg.tokenRefreshUrl, {
@@ -142,6 +154,7 @@ function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationDat
  * if everything is okay.
  * 
  * @param resp the HTTP response to handle
+ * @private
  */
 function handleHttpErrors(resp: Response): Promise<Response> {
     return resp.ok ?

@@ -1,0 +1,15 @@
+language: node_js
+cache: yarn
+node_js: node
+
+before_install: cd www
+install: yarn
+script: yarn run build
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: www/build/docs
+  on:
+    branch: master
