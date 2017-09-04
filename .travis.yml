@@ -13,3 +13,10 @@ deploy:
   local_dir: build/docs # We cd'd into www before
   on:
     branch: master
+deploy:
+  provider: npm
+  email: $NPM_DPL_EMAIL
+  api_key: $NPM_DPL_TOKEN
+  tag: next
+  on:
+    tags: true
