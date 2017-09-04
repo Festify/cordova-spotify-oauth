@@ -1,5 +1,7 @@
 # Cordova Spotify OAuth Plugin
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Festify/cordova-spotify-oauth.svg)](https://greenkeeper.io/)
+
 Easy Spotify authentication for [Apache Cordova][cordova] / PhoneGap apps
 
 [API Documentation][api-docs]
