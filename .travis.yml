@@ -5,6 +5,7 @@ node_js: node
 before_install: cd www
 install: yarn
 script: yarn run build
+before_deploy: cd ..
 
 deploy:
   provider: pages
