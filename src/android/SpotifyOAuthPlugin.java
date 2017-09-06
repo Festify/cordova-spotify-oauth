@@ -45,6 +45,7 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             redirectUrl
         ))
             .setScopes(scopes)
+            .setShowDialog(true)
             .build();
 
         AuthenticationClient.openLoginActivity(
