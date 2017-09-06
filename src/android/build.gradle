@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compile(name:'spotify-auth', ext:'aar')
+    compile 'com.spotify.android:auth:1.0.0-alpha'
 }
 
 android {

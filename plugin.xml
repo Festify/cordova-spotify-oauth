@@ -11,8 +11,6 @@
     <dependency id="es6-promise-plugin"/>
 
     <platform name="android">
-        <hook type="before_plugin_install" src="install-android.sh"/>
-        
         <config-file target="config.xml" parent="/*">
             <feature name="SpotifyOAuth">
                 <param name="android-package" value="rocks.festify.SpotifyOAuthPlugin"/>
@@ -27,14 +25,7 @@
 
         <source-file src="src/android/SpotifyOAuthPlugin.java" target-dir="src/rocks/festify"/>
 
-        <!--
-            Because Cordova doesn't like linking to AARs, we do some black magic
-            gradle trickery to link against the file.
-         -->
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-        <resource-file
-            src="src/android/spotify-auth/auth-lib/build/outputs/aar/spotify-android-auth-1.0.0.aar"
-            target="libs/spotify-auth.aar" />
     </platform>
 
     <platform name="ios">
