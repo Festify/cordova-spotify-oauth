@@ -21,7 +21,7 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
         if ("getCode".equals(action)) {
             String clientId = args.getString(0);
             String redirectUrl = args.getString(1);
-            String[] scopes = toStringArray(args.getJSONArray(2));
+            String[] scopes = toStringArray(args.getJSONArray(4));
 
             this.getCode(clientId, redirectUrl, scopes, ctx);
             return true;

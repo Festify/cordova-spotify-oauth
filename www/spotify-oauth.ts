@@ -131,6 +131,8 @@ function oauth(cfg: Config): Promise<AuthorizationData> {
     return exec("getCode", [
         cfg.clientId,
         cfg.redirectUrl,
+        cfg.tokenExchangeUrl,
+        cfg.tokenRefreshUrl,
         cfg.scopes
     ])
         .then(({ code }) => fetch(cfg.tokenExchangeUrl, {

@@ -17,7 +17,9 @@ extension URL {
         
         auth.clientID = command.argument(at: 0) as! String
         auth.redirectURL = URL(string: command.argument(at: 1) as! String)
-        auth.requestedScopes = command.argument(at: 2) as! Array
+        auth.tokenSwapURL = URL(string: command.argument(at: 2) as! String)
+        auth.tokenRefreshURL = URL(string: command.argument(at: 3) as! String)
+        auth.requestedScopes = command.argument(at: 4) as! Array
         
         let svc = SFSafariViewController(url: auth.spotifyWebAuthenticationURL())
         svc.delegate = self;
