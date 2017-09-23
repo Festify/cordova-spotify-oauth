@@ -181,6 +181,7 @@ function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationDat
  *
  * @param a the first array
  * @param b the second array
+ * @hidden
  */
 function arraysEqual(a: string[], b: string[]): boolean {
     if (a == b) {
