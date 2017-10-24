@@ -1,6 +1,5 @@
 const TypeDocPlugin = require('typedoc-webpack-plugin');
 const path = require('path');
-const webpack = require('webpack');
 
 module.exports = {
     entry: './spotify-oauth.ts',
