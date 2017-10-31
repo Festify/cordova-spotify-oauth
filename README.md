@@ -22,11 +22,36 @@ cordova plugin add cordova-spotify-oauth
 
 The plugin implements the [OAuth Authorization Code][auth-code-flow] flow for the Spotify API. This allows you to obtain access and refresh tokens for user related-actions (such as viewing and modifying their library, streaming tracks via the SDKs, etc.). Therefore, additional preparation in addition to installing the plugin is required.
 
-The JS interface is described below at [API Documentation][api-docs].
+The plugin consists of two functions clobbered onto `cordova.plugins.spotifyAuth`.
+
+### Examples
+
+#### Log in
+```js
+const config = {
+  clientId: "<SPOTIFY CLIENT ID>",
+  redirectUrl: "<REDIRECT URL, MUST MATCH WITH AUTH ENDPOINT AND SPOTIFY DEV CONSOLE>",
+  scopes: ["streaming"], // see Spotify Dev console for all scopes
+  tokenExchangeUrl: "<URL OF TOKEN EXCHANGE HTTP ENDPOINT>",
+  tokenExchangeUrl: "<URL OF TOKEN REFRESH HTTP ENDPOINT>",
+};
+
+cordova.plugins.spotifyAuth.authorize(config)
+  .then(({ accessToken, expiresAt }) => {
+    console.log(`Got an access token, its ${accessToken}!`);
+    console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+  });
+```
+
+#### Log out
+```js
+cordova.plugins.spotifyAuth.forget()
+  .then(() => console.log("We're logged out!"));
+```
 
 ### Protocol registration
 
-The plugin uses custom URL schemes (universal links support will follow) to redirect back from the browser into the app. 
+The plugin uses custom URL schemes (universal links support will follow) to redirect back from the browser into the app.
 
 You need to register the callback protocol inside the `App Info.plist` so that iOS knows which app to start when it is redirected when the authentication is done. If you want to use Chrome Custom Tabs (optional, but 110% nice), you must also register the URL scheme and path you will be redirected to within the `AndroidManifest.xml` file.
 
