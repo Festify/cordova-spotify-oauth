@@ -33,7 +33,7 @@ const config = {
   redirectUrl: "<REDIRECT URL, MUST MATCH WITH AUTH ENDPOINT AND SPOTIFY DEV CONSOLE>",
   scopes: ["streaming"], // see Spotify Dev console for all scopes
   tokenExchangeUrl: "<URL OF TOKEN EXCHANGE HTTP ENDPOINT>",
-  tokenExchangeUrl: "<URL OF TOKEN REFRESH HTTP ENDPOINT>",
+  tokenRefreshUrl: "<URL OF TOKEN REFRESH HTTP ENDPOINT>",
 };
 
 cordova.plugins.spotifyAuth.authorize(config)
