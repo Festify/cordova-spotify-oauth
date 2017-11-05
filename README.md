@@ -80,6 +80,7 @@ You can then deploy the functions like this:
 
 ```bash
 cd oauth-token-api
+npm install
 serverless deploy
 ```
 
