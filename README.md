@@ -66,6 +66,7 @@ You need to register your custom redirect URL within the Spotify Developer conso
 The authorization code flow requires server code for security. These come in the form of two HTTP endpoints, one for the auth code exchange, and the other one for access token refresh. The SDK will POST `application/x-www-form-urlencoded` data and expects JSON back.
 
 To easily implement them, we built a [Serverless][serverless] service for [AWS Lambda][aws-lambda] over in the [`oauth-token-api`][token-api-example] folder. Make sure you [install the Serverless Framework properly][serverless-installation]!
+To resolve the project dependencies, please use [yarn][yarn-install] as shown below before deploying the service.
 
 For the execution of the functions to work you need to set some environmental configuration in the file `oauth-token-api/.env`
 
@@ -80,7 +81,7 @@ You can then deploy the functions like this:
 
 ```bash
 cd oauth-token-api
-npm install
+yarn install
 serverless deploy
 ```
 
@@ -105,3 +106,4 @@ Pull requests are very welcome! Please use the [gitmoji][gitmoji] style for comm
 [token-api-example]: https://github.com/Festify/cordova-spotify-oauth/tree/develop/oauth-token-api "OAuth Token Service example"
 [token-exchange-url]: https://festify.github.io/cordova-spotify-oauth/interfaces/config.html#tokenexchangeurl "OAuth Auth Code Exchange URL"
 [token-refresh-url]: https://festify.github.io/cordova-spotify-oauth/interfaces/config.html#tokenrefreshurl "OAuth Access Token Refresh URL"
+[yarn-install]: https://yarnpkg.com/en/docs/install "Yarn Install"
