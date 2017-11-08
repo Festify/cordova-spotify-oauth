@@ -12,21 +12,11 @@ This plugin provides a simple way of authenticating a user with the Spotify API 
 
 The plugin uses `SFSafariViewController` and Chrome Custom Tabs, if available. This also means it will only work on iOS 9 and above (but this shouldn't be a problem anymore).
 
-## Installation
-
-```bash
-cordova plugin add cordova-spotify-oauth
-```
-
-## Usage
-
-The plugin implements the [OAuth Authorization Code][auth-code-flow] flow for the Spotify API. This allows you to obtain access and refresh tokens for user related-actions (such as viewing and modifying their library, streaming tracks via the SDKs, etc.). Therefore, additional preparation in addition to installing the plugin is required.
+## Examples
 
 The plugin consists of two functions clobbered onto `cordova.plugins.spotifyAuth`.
 
-### Examples
-
-#### Log in
+### Log in
 ```js
 const config = {
   clientId: "<SPOTIFY CLIENT ID>",
@@ -43,11 +33,21 @@ cordova.plugins.spotifyAuth.authorize(config)
   });
 ```
 
-#### Log out
+### Log out
 ```js
 cordova.plugins.spotifyAuth.forget()
   .then(() => console.log("We're logged out!"));
 ```
+
+## Installation
+
+```bash
+cordova plugin add cordova-spotify-oauth
+```
+
+## Usage
+
+The plugin implements the [OAuth Authorization Code][auth-code-flow] flow for the Spotify API. This allows you to obtain access and refresh tokens for user related-actions (such as viewing and modifying their library, streaming tracks via the SDKs, etc.). Therefore, additional preparation in addition to installing the plugin is required.
 
 ### Protocol registration
 
