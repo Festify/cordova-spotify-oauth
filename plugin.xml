@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-spotify-oauth" version="0.1.8" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-spotify-oauth" version="0.1.10" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova-spotify-oauth</name>
 
     <js-module name="cordova-spotify-oauth" src="www/build/spotify-oauth.min.js">
