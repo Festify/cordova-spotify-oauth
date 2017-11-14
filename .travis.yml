@@ -17,7 +17,6 @@ deploy:
   - provider: npm
     email: $NPM_DPL_EMAIL
     api_key: $NPM_DPL_TOKEN
-    tag: next
     skip_cleanup: true
     on:
       tags: true
