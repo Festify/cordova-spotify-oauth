@@ -20,9 +20,11 @@ functions:
       - http:
           path: exchange
           method: post
+          cors: true
   refreshToken:
     handler: spotifyTokenService.refreshToken
     events:
       - http:
           path: refresh
           method: post
+          cors: true
