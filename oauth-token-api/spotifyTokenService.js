@@ -14,6 +14,19 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const CLIENT_CALLBACK_URL = process.env.CLIENT_CALLBACK_URL;
 const ENCRYPTION_SECRET = process.env.ENCRYPTION_SECRET;
 
+
+// add CORS headers to response
+// Reference: https://serverless.com/blog/cors-api-gateway-survival-guide/#cors-response-headers
+function cors(response) {
+  if (response) {
+    const headers = response.headers || {};
+    headers["Access-Control-Allow-Origin"] = "*"; // Required for CORS support to work
+    headers["Access-Control-Allow-Credentials"] = true;  // Required for cookies, authorization headers with HTTPS
+    response.headers = headers;
+  }
+  return response;
+}
+
 const spotifyRequest = params => {
     return new Promise((resolve, reject) => {
         request.post(API_URL, {
@@ -47,12 +60,12 @@ module.exports.exchangeCode = (event, context, callback) => {
     const params = qs.parse(event.body);
 
     if (!params.code) {
-        callback(null, {
+        callback(null, cors({
             statusCode: 400,
             body: JSON.stringify({
                 "error" : "Parameter missing"
             })
-        });
+        }));
         return;
     }
 
@@ -75,7 +88,7 @@ module.exports.exchangeCode = (event, context, callback) => {
             return Promise.resolve(response);
         })
         .then(response => {
-           callback(null, response);
+           callback(null, cors(response));
         });
 };
 
@@ -83,12 +96,12 @@ module.exports.refreshToken = (event, context, callback) => {
     const params = qs.parse(event.body);
 
     if (!params.refresh_token) {
-        callback(null, {
+        callback(null, cors({
             statusCode: 400,
             body: JSON.stringify({
                 "error" : "Parameter missing"
             })
-        });
+        }));
         return;
     }
 
@@ -109,6 +122,6 @@ module.exports.refreshToken = (event, context, callback) => {
             return Promise.resolve(response);
         })
         .then(response => {
-            callback(null, response);
+            callback(null, cors(response));
         });
 };

@@ -63,7 +63,7 @@ You need to register your custom redirect URL within the Spotify Developer conso
 
 ### Token Exchange Service
 
-The authorization code flow requires server code for security. These come in the form of two HTTP endpoints, one for the auth code exchange, and the other one for access token refresh. The SDK will POST `application/x-www-form-urlencoded` data and expects JSON back.
+The authorization code flow requires server code for security. These come in the form of two HTTP endpoints, one for the auth code exchange, and the other one for access token refresh. The SDK will POST `application/x-www-form-urlencoded` data and expects JSON back. Ensure you have proper CORS config set up.
 
 To easily implement them, we built a [Serverless][serverless] service for [AWS Lambda][aws-lambda] over in the [`oauth-token-api`][token-api-example] folder. Make sure you [install the Serverless Framework properly][serverless-installation]!
 To resolve the project dependencies, please use [yarn][yarn-install] as shown below before deploying the service.
