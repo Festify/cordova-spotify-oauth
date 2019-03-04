@@ -35,8 +35,7 @@ cordova.plugins.spotifyAuth.authorize(config)
 
 ### Log out
 ```js
-cordova.plugins.spotifyAuth.forget()
-  .then(() => console.log("We're logged out!"));
+cordova.plugins.spotifyAuth.forget();
 ```
 
 ## Installation
