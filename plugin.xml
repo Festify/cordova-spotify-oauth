@@ -35,7 +35,7 @@
             </feature>
         </config-file>
 
-        <dependency id="cordova-plugin-add-swift-support" version="1.6.1"/>
+        <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
 
         <framework src="src/ios/spotify-sdk/SpotifyAuthentication.framework" custom="true"/>
 
