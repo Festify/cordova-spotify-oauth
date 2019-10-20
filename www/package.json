@@ -15,6 +15,6 @@
   },
   "dependencies": {
     "async": "^2.5.0",
-    "whatwg-fetch": "^2.0.3"
+    "whatwg-fetch": "^3.0.0"
   }
 }
