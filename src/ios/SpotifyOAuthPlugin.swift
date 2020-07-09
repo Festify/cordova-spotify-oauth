@@ -36,7 +36,7 @@ extension URL {
             queue: nil
         ) { note in
             let url = note.object as! URL
-            if(!url.absoluteString.contains("code")) { return }
+            guard url.absoluteString.contains("code") else { return }
             
             svc.presentingViewController!.dismiss(animated: true, completion: nil)
             NotificationCenter.default.removeObserver(observer!)
