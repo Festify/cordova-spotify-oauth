@@ -14,18 +14,26 @@ extension URL {
     
     @objc(getCode:) func getCode(_ command: CDVInvokedUrlCommand) {
         let clientid = command.argument(at: 0) as! String
-        let redirectURL = URL(string: command.argument(at: 1) as! String)!
-        let tokenRefreshURL = URL(string: command.argument(at: 3) as! String)!
+        let redirectURL = command.argument(at: 1) as! String
         let requestedScopes = command.argument(at: 4) as! [String]
-        let redirectEncoded = redirectURL.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
-        var webUrl = "https://accounts.spotify.com/authorize?client_id="+clientid+"&response_type=code&redirect_uri="
-        webUrl += redirectEncoded
-        webUrl += "&show_dialog=true&scope="
-        webUrl += scopesToString(scopes: requestedScopes)
-        webUrl += "&utm_source=spotify-sdk&utm_medium=ios-sdk&utm_campaign=ios-sdk"
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "accounts.spotify.com"
+        components.path = "/authorize"
+        components.queryItems = [
+            URLQueryItem(name: "client_id", value: clientid),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "redirect_uri", value: redirectURL),
+            URLQueryItem(name: "show_dialog", value: "true"),
+            URLQueryItem(name: "scope", value: requestedScopes.joined(separator: " ")),
+            URLQueryItem(name: "utm_source", value: "spotify-sdk"),
+            URLQueryItem(name: "utm_medium", value: "ios-sdk"),
+            URLQueryItem(name: "utm_campaign", value: "ios-sdk")
+        ]
         
-        let svc = SFSafariViewController(url: URL(string: webUrl)!)
+        let svc = SFSafariViewController(url: components.url!)
+        
         svc.delegate = self;
         svc.modalPresentationStyle = .overFullScreen
         
@@ -56,14 +64,6 @@ extension URL {
         self.currentNsObserver = observer
         
         self.viewController.present(svc, animated: true)
-    }
-    
-    func scopesToString(scopes: [String]) -> String {
-        var result = ""
-        for scope in scopes {
-            result += scope + " "
-        }
-        return result.trimmingCharacters(in: .whitespaces).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
     }
     
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
