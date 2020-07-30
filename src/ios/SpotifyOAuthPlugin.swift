@@ -13,15 +13,27 @@ extension URL {
     private var currentNsObserver: AnyObject?
     
     @objc(getCode:) func getCode(_ command: CDVInvokedUrlCommand) {
-        let auth = SPTAuth.defaultInstance()
+        let clientid = command.argument(at: 0) as! String
+        let redirectURL = command.argument(at: 1) as! String
+        let requestedScopes = command.argument(at: 4) as! [String]
         
-        auth.clientID = command.argument(at: 0) as! String
-        auth.redirectURL = URL(string: command.argument(at: 1) as! String)
-        auth.tokenSwapURL = URL(string: command.argument(at: 2) as! String)
-        auth.tokenRefreshURL = URL(string: command.argument(at: 3) as! String)
-        auth.requestedScopes = command.argument(at: 4) as! Array
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "accounts.spotify.com"
+        components.path = "/authorize"
+        components.queryItems = [
+            URLQueryItem(name: "client_id", value: clientid),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "redirect_uri", value: redirectURL),
+            URLQueryItem(name: "show_dialog", value: "true"),
+            URLQueryItem(name: "scope", value: requestedScopes.joined(separator: " ")),
+            URLQueryItem(name: "utm_source", value: "spotify-sdk"),
+            URLQueryItem(name: "utm_medium", value: "ios-sdk"),
+            URLQueryItem(name: "utm_campaign", value: "ios-sdk")
+        ]
         
-        let svc = SFSafariViewController(url: auth.spotifyWebAuthenticationURL())
+        let svc = SFSafariViewController(url: components.url!)
+        
         svc.delegate = self;
         svc.modalPresentationStyle = .overFullScreen
         
@@ -32,7 +44,7 @@ extension URL {
             queue: nil
         ) { note in
             let url = note.object as! URL
-            guard auth.canHandle(url) else { return }
+            guard url.absoluteString.contains("code") else { return }
             
             svc.presentingViewController!.dismiss(animated: true, completion: nil)
             NotificationCenter.default.removeObserver(observer!)
