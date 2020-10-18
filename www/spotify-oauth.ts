@@ -165,7 +165,7 @@ function refresh(cfg: Config, data: AuthorizationData): Promise<AuthorizationDat
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: 'refresh_token=' + data.encryptedRefreshToken
+        body: 'refresh_token=' + encodeURIComponent(data.encryptedRefreshToken)
     })
         .then(handleHttpErrors)
         .then(resp => resp.json())
