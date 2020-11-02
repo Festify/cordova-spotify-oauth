@@ -7,7 +7,9 @@ import android.util.Log;
 import org.apache.cordova.*;
 import org.json.*;
 
-import com.spotify.sdk.android.authentication.*;
+import com.spotify.sdk.android.auth.AuthorizationClient;
+import com.spotify.sdk.android.auth.AuthorizationRequest;
+import com.spotify.sdk.android.auth.AuthorizationResponse;
 
 public class SpotifyOAuthPlugin extends CordovaPlugin {
     private static final int LOGIN_REQUEST_CODE = 8139;
@@ -16,7 +18,7 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
     private CallbackContext currentCtx = null;
 
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext ctx) 
+    public boolean execute(String action, JSONArray args, CallbackContext ctx)
             throws JSONException {
         if ("getCode".equals(action)) {
             String clientId = args.getString(0);
@@ -31,26 +33,26 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
     }
 
     private void getCode(
-        final String clientId, 
-        final String redirectUrl, 
+        final String clientId,
+        final String redirectUrl,
         final String[] scopes,
         final CallbackContext ctx
     ) {
         cordova.setActivityResultCallback(this);
         this.currentCtx = ctx;
 
-        AuthenticationRequest ab = (new AuthenticationRequest.Builder(
+        AuthorizationRequest ab = (new AuthorizationRequest.Builder(
             clientId,
-            AuthenticationResponse.Type.CODE,
+            AuthorizationResponse.Type.CODE,
             redirectUrl
         ))
             .setScopes(scopes)
             .setShowDialog(true)
             .build();
 
-        AuthenticationClient.openLoginActivity(
-            this.cordova.getActivity(), 
-            LOGIN_REQUEST_CODE, 
+        AuthorizationClient.openLoginActivity(
+            this.cordova.getActivity(),
+            LOGIN_REQUEST_CODE,
             ab
         );
     }
@@ -69,8 +71,8 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             return;
         }
 
-        final AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
-        if (response.getType() == AuthenticationResponse.Type.CODE) {
+        final AuthorizationResponse response = AuthorizationClient.getResponse(resultCode, intent);
+        if (response.getType() == AuthorizationResponse.Type.CODE) {
             JSONObject res = new JSONObject();
             try {
                 res.put("code", response.getCode());
@@ -79,7 +81,7 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
             }
             cb.success(res);
         } else {
-            JSONObject err = response.getType() == AuthenticationResponse.Type.EMPTY ?
+            JSONObject err = response.getType() == AuthorizationResponse.Type.EMPTY ?
                 this.makeError(
                     "auth_canceled",
                     "The user cancelled the authentication process."
@@ -89,7 +91,7 @@ public class SpotifyOAuthPlugin extends CordovaPlugin {
                 );
             cb.error(err);
         }
-            
+
         this.currentCtx = null;
     }
 
